@@ -1,0 +1,9 @@
+# Created at 2025-04-11T15:56:06.303
+org.junit.platform.commons.JUnitException: The wrapped NoClassDefFoundError is likely caused by the versions of JUnit jars on the classpath/module path not being properly aligned. 
+Please ensure consistent versions are used (see https://junit.org/junit5/docs/5.13.0-M2/user-guide/#dependency-metadata).
+The following conflicting versions were detected:
+- org.junit.platform.commons: 1.10.3
+- org.junit.platform.engine: 1.13.0-M2
+- org.junit.platform.launcher: 1.13.0-M2
+
+
