@@ -44,11 +44,11 @@ public class ControladorSubsidio {
     DecimalFormat f3 = new DecimalFormat("$###,###,###.##");
     
     //Asignar cabecera y valores a la tabla tblsalidaparcial del panel salidaparcial
-    String cabecera[] = {"Ident.", "Apellidos", "Nombres", "Val. matSem", "% Sub.", "Val. sub.", "Val. PagEst"};
+    String cabecera[] = {"Ident", "Apellidos", "Nombres", "Val. matSem", "% Sub.", "Val. sub.", "Val. PagEst"};
     String datos[][] = {};
     DefaultTableModel modelo = new DefaultTableModel(datos, cabecera);
     
-    private final String cabecera2[] = {"Nombre", "Apellidos", "Ident", "Promedio", "Val. Matrícula"};
+    private final String cabecera2[] = {"Nombre", "Apellidos", "Ident", "Val. Matricula", "Promedio"};
     private final String datos2[][] = {};
     private final DefaultTableModel modelo2 = new DefaultTableModel(datos2, cabecera2);
     
@@ -68,6 +68,7 @@ public class ControladorSubsidio {
         this.visSub.getBtnCalcular().addActionListener(e ->{btnCalcular();});
         this.visSub.getBtnTotalizar().addActionListener(e ->{btnTotalizar();});
         this.visSub.getBtnLimpiar().addActionListener(e ->{btnLimpiar();});
+        this.visLis.getLimpiar().addActionListener(e ->{btnLimpiar();});
         this.visSub.getBtnSalir().addActionListener(e ->{System.exit(0);});
         this.salPar.getBtnVolver().addActionListener(e ->{btnVolver();});
         this.tot.getBntVolver().addActionListener(e ->{btnVolver();});
@@ -92,45 +93,56 @@ public class ControladorSubsidio {
     // === MÉTODOS ORIGINALES DEL SISTEMA DE SUBSIDIOS ===
     
     private void btnValidar() {
-      if(val.validarNumeroEnteroPositivo(ent.getTextideEst().getText())) {
-            est.setIdeEst(ent.getTextideEst().getText());
-            if (val.validarNombre(ent.getTextnomEst().getText())) {
-                est.setNomEst(ent.getTextnomEst().getText());
-                if (val.validarApellido(ent.getTextapeEst().getText())) {
-                    est.setApeEst(ent.getTextapeEst().getText());
-                    if (val.validarNumeroRealPositivo(ent.getTextproSem().getText())) {
-                        est.setProSem(Float.parseFloat(ent.getTextproSem().getText()));
-                        if(val.validarNumeroRealPositivo(ent.getTextvalMatSem().getText())) {
-                            est.setValMatSem(Float.parseFloat(ent.getTextvalMatSem().getText()));
-                            if (est.getIdeEst().isEmpty() || est.getNomEst().isEmpty() || 
-                               est.getApeEst().isEmpty() || est.getProSem() == 0 || 
-                               est.getValMatSem() == 0) {
-                                 JOptionPane.showMessageDialog(null, "Todos los campos deben estar llenos", "Error", JOptionPane.WARNING_MESSAGE);
-                                  return;
-                             }
-                            if (est.getProSem() < 0 || est.getProSem() > 5) {
-                             JOptionPane.showMessageDialog(null, "El promedio del semestre debe estar entre 0 y 5", "Error", JOptionPane.WARNING_MESSAGE);
-                                    return;
-                           }
-                            visSub.getBtnAddInicio().setEnabled(true);
-                            visSub.getBtnAddFinal().setEnabled(true); 
-                            
-                        } else {
-                            error(ent.getTextvalMatSem(),"Error en el campo valor de matricula, su contenido no es válido");
-                        }
+        if(val.validarNumeroEnteroPositivo(ent.getTextideEst().getText())) {
+        est.setIdeEst(ent.getTextideEst().getText());
+        ide = ent.getTextideEst().getText(); // AGREGAR ESTA LÍNEA
+        
+        if (val.validarNombre(ent.getTextnomEst().getText())) {
+            est.setNomEst(ent.getTextnomEst().getText());
+            nom = ent.getTextnomEst().getText(); // AGREGAR ESTA LÍNEA
+            
+            if (val.validarApellido(ent.getTextapeEst().getText())) {
+                est.setApeEst(ent.getTextapeEst().getText());
+                ape = ent.getTextapeEst().getText(); // AGREGAR ESTA LÍNEA
+                
+                if (val.validarNumeroRealPositivo(ent.getTextproSem().getText())) {
+                    est.setProSem(Float.parseFloat(ent.getTextproSem().getText()));
+                    proSem = Float.parseFloat(ent.getTextproSem().getText()); // AGREGAR ESTA LÍNEA
+                    
+                    if(val.validarNumeroRealPositivo(ent.getTextvalMatSem().getText())) {
+                        est.setValMatSem(Float.parseFloat(ent.getTextvalMatSem().getText()));
+                        valMatSem = Float.parseFloat(ent.getTextvalMatSem().getText()); // AGREGAR ESTA LÍNEA
+                        
+                        if (est.getIdeEst().isEmpty() || est.getNomEst().isEmpty() || 
+                           est.getApeEst().isEmpty() || est.getProSem() == 0 || 
+                           est.getValMatSem() == 0) {
+                             JOptionPane.showMessageDialog(null, "Todos los campos deben estar llenos", "Error", JOptionPane.WARNING_MESSAGE);
+                              return;
+                         }
+                        if (est.getProSem() < 0 || est.getProSem() > 5) {
+                         JOptionPane.showMessageDialog(null, "El promedio del semestre debe estar entre 0 y 5", "Error", JOptionPane.WARNING_MESSAGE);
+                                return;
+                       }
+                        visSub.getBtnAddInicio().setEnabled(true);
+                        visSub.getBtnAddFinal().setEnabled(true); 
+                        
                     } else {
-                        error(ent.getTextproSem(),"Error en el campo promedio de semestre, su contenido no es válido");
+                        error(ent.getTextvalMatSem(),"Error en el campo valor de matricula, su contenido no es válido");
                     }
                 } else {
-                    error(ent.getTextapeEst(),"Error en el campo apellido, su contenido no es válido");
+                    error(ent.getTextproSem(),"Error en el campo promedio de semestre, su contenido no es válido");
                 }
             } else {
-                error(ent.getTextnomEst(),"Error en el campo nombre, su contenido no es válido");
+                error(ent.getTextapeEst(),"Error en el campo apellido, su contenido no es válido");
             }
         } else {
-            error(ent.getTextideEst(),"Error en el campo identificacion, su contenido no es válido");
+            error(ent.getTextnomEst(),"Error en el campo nombre, su contenido no es válido");
         }
+    } else {
+        error(ent.getTextideEst(),"Error en el campo identificacion, su contenido no es válido");
     }
+
+ }
 
     private void btnCalcular() {
         //Procesos parciales
@@ -217,6 +229,7 @@ public class ControladorSubsidio {
     }
 
     private void btnLimpiar() {
+        modelo2.setRowCount(0);
         ent.getTextideEst().setText("");
         ent.getTextnomEst().setText("");
         ent.getTextapeEst().setText("");
