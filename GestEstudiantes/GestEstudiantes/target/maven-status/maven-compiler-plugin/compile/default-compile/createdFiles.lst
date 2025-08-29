@@ -1,0 +1,4 @@
+com\example\gestestudiantes\GestEstudiantesApplication.class
+com\example\gestestudiantes\controller\EstudianteController.class
+com\example\gestestudiantes\repository\EstudianteRepository.class
+com\example\gestestudiantes\model\Estudiantes.class
